@@ -19,30 +19,30 @@ canvas#sketch {
 	color: transparent;
 }
 
-#modsketch_container {
+.modal .modal-body {
 	background-color: transparent;
 	padding: 0;
 	line-height: 0;
 }
 
-#modsketch .modal-content {
+.modal .modal-content {
 	border: 0;
 }
 
-#modsketch .modal-header {
+.modal .modal-header {
 	cursor: move;
 }
 
-#modsketch .modal-header, 
-#modsketch .modal-footer {
+.modal .modal-header, 
+.modal .modal-footer {
 	padding: 10px;
 }
 
-#modsketch .modal-header .close {
+.modal .modal-header .close {
 	margin-top: 2px;
 }
 
-#modsketch .modal-title {
+.modal .modal-title {
 	display: inline;
 	margin-right: 4px;
 }

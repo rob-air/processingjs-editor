@@ -38,7 +38,7 @@ require(['ace/ace'], function(ace) {
 
 require(['jquery-ui', 'bootstrap'], function($, _bootstrap) {
 	jQuery(document).ready(function() {
-		jQuery("#modsketch").draggable({
+		jQuery(".modal").draggable({
 			handle: ".modal-header"
 		});
 		listSketches();
@@ -94,6 +94,7 @@ function saveImage(sketchId, modal) {
 	if (modal) {
 		jQuery('#screenshot_img').prop('src', imgdata);
 		$('#screenshot').modal();
+		setModalSize();
 	}
 	log('Image export: <a target="_blank" href="'+imgdata+'">right-click save</a>');
 }
@@ -105,7 +106,7 @@ function getSketchSize(sketchId) {
 
 function setModalSize() {
 	var sketch = getSketchSize('modsketch_sketch');
-	jQuery('#modsketch .modal-dialog').css({
+	jQuery('.modal .modal-dialog').css({
 		width: sketch.width,
 		height: sketch.height
 	});
