@@ -30,31 +30,70 @@ require.config({
 // Load the ace module
 require(['ace/ace'], function(ace) {
 	// Set up the editor
-	window.editor = ace.edit('code');
-	window.editor.setTheme('ace/theme/monokai');
-	window.editor.getSession().setMode('ace/mode/java');
-	// etc...
+	window.ace = ace;
+
 });
 
 require(['jquery-ui', 'bootstrap'], function($, _bootstrap) {
 	jQuery(document).ready(function() {
+		destroyTabs();
+		initTab(0);
+		
 		jQuery(".modal").draggable({
 			handle: ".modal-header"
 		});
+
+
 		listSketches();
+
+
+		jQuery('#tablist a').click(function (e) {
+			e.preventDefault()
+			jQuery(this).tab('show')
+		})
 	});
 	return {};
 });
 
-function saveData() {
-	localStorage.setItem("processing_sketch", editor.getValue());
+function initTab(tabId, tabLabel) {
+	var label = tabLabel || 'code'+tabId;
+	var active = tabId==0? ' active': '';
+	jQuery('<li class="'+active+'"><a href="#code'+tabId+'" role="tab" data-toggle="tab">'+label+'</a></li>').appendTo(jQuery('#tablist'));
+	jQuery('<div class="code tab-pane'+active+'" id="code'+tabId+'"></div>').appendTo(jQuery('#tabcontainer'));
+
+	
+	window.editor[tabId] = window.ace.edit('code'+tabId);
+	window.editor[tabId].setTheme('ace/theme/monokai');
+	window.editor[tabId].getSession().setMode('ace/mode/java');
+	window.editor[tabId].getSession().setTabSize(4);
+	window.editor[tabId].getSession().setUseSoftTabs(true);
+}
+
+function destroyTabs() {
+	i=0;
+	jQuery('#tablist li').each(function() {
+		jQuery(this).remove();
+		i++;
+	});
+
+	j=0;
+	jQuery('#tabcontainer div.code').each(function() {
+		jQuery(this).remove();
+		j++;
+	});
+
+	window.editor = [];
+}
+
+function saveData(tabId) {
+	localStorage.setItem("processing_sketch", editor[tabId].getValue());
 	log('Sketch saved in browser localStorage');
 }
 
-function restoreData() {
+function restoreData(tabId) {
 	var sketch = localStorage.getItem("processing_sketch");
 	if (sketch!=null && sketch!="") {
-		editor.setValue(localStorage.getItem("processing_sketch"));
+		editor[tabId].setValue(localStorage.getItem("processing_sketch"));
 		log('Sketch restored from browser localStorage');
 	} else {
 		loadSketch('default.pde');
@@ -64,9 +103,10 @@ function restoreData() {
 function loadSketch(sketch, tab) {
 	var tab = tab || 0;
 	var sketch = sketch || 'default.pde';
-	console.log(sketch, tab);
+
 	jQuery.get("pde/"+sketch, function(data) {
-		editor.setValue(data);
+
+		editor[tab].setValue(data);
 		log(sketch+' sketch loaded');
 	});
 }
@@ -74,9 +114,10 @@ function loadSketch(sketch, tab) {
 function loadProject(sketches) {
 	var sk = sketches.split(',');
 	var tab = 0;
+	destroyTabs();
 
 	for (var i = sk.length - 1; i >= 0; i--) {
-//		console.log(sk[i], tab);
+		initTab(tab, sk[i]);
 		loadSketch(sk[i], tab);
 		tab++;
 	};
@@ -85,7 +126,7 @@ function loadProject(sketches) {
 function listSketches() {
 	jQuery.get("pde/list.php", function(data) {
 		var list = jQuery('#list_sketches');
-		console.log(data);
+		
 		for (var i in data) {
 			//console.log(data[i]);
 			if (typeof data[i] === 'string') {

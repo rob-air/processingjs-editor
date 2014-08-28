@@ -6,9 +6,18 @@ canvas#sketch {
 	border: 1px solid;
 }
 
-#code {
+#code0 {
 	position: absolute;
-	top: 50px;
+	font-size: 16px;
+}
+
+#code1 {
+	position: absolute;
+	font-size: 16px;
+}
+
+.code {
+	top: 90px;
 	right: 0;
 	bottom: 80px;
 	left: 0;

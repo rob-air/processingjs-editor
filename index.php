@@ -42,20 +42,15 @@
 				<button onclick="saveImage('modsketch_sketch', true);" type="button" id="action_export" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-picture"></span> Screenshot</button>
 			</div>
 
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist" id="tablist">
+		</ul>
+
 			
 		</div>
 
-		<div class="container-fluid">
-
-			<div id="code"><?php
-if (isset($_GET['sketch']) && trim($_GET['sketch'])!='') {
-	$sketch = $_GET['sketch'];
-	if (is_readable('pde/'.$sketch.'.pde')) {
-		echo file_get_contents('pde/'.$sketch.'.pde');
-	}
-}
-			?></div>
-			
+		<!-- Tab panes -->
+		<div class="container-fluid tab-content" id="tabcontainer">			
 		</div>
 
 		<div id="output"></div>
