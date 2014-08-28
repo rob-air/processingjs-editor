@@ -24,7 +24,7 @@ Any help or ideas are welcome, I don't mind beginners trying out their skills.
 * Add a Processing "mode" for Ace
 * Use a package controller to limit the size of this repo
 * Add server-side saves and versioning
-* Use tabs just like the Processing PDE for sketches that need multiple files (currently only signe-file sketches allowed)
+* _DONE Use tabs just like the Processing PDE for sketches that need multiple files_ 
 * Use permalink-type URLs for sketches and versions
 * ?Collaborative edition maybe?
 
