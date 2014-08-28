@@ -72,7 +72,7 @@ function initTab(tabId, tabLabel) {
 function destroyTabs() {
 	i=0;
 	jQuery('#tablist li').each(function() {
-		console.log(jQuery(this));
+		//console.log(jQuery(this));
 		jQuery(this).remove();
 		i++;
 	});
@@ -88,17 +88,30 @@ function destroyTabs() {
 }
 
 function saveData(tabId) {
-	localStorage.setItem("processing_sketch", editor.pjstabs[tabId].getValue());
+	var sketches = [];
+
+	for (var i = 0; i < window.editor.pjstabs.length; i++) {
+		sketches[i] = window.editor.pjstabs[i].getValue();
+	};
+
+	localStorage["processing_sketch"] = JSON.stringify(sketches);
 	log('Sketch saved in browser localStorage');
 }
 
 function restoreData(tabId) {
-	var sketch = localStorage.getItem("processing_sketch");
-	if (sketch!=null && sketch!="") {
-		editor.pjstabs[tabId].setValue(localStorage.getItem("processing_sketch"));
+	destroyTabs();
+
+	var sketches = JSON.parse(localStorage["processing_sketch"]);
+	//console.log(typeof sketches);
+	if (typeof sketches === 'object') {
+		for (var i = 0; i < sketches.length; i++) {
+			initTab(i, 'Tab '+i);
+			window.editor.pjstabs[i].setValue(sketches[i]);
+		};
+		//editor.pjstabs[tabId].setValue(localStorage.getItem("processing_sketch"));
 		log('Sketch restored from browser localStorage');
 	} else {
-		loadSketch('default.pde');
+		loadProject('default.pde');
 	}
 }
 
@@ -119,7 +132,7 @@ function loadProject(sketches) {
 	destroyTabs();
 
     for (var i = 0; i < sk.length; i++) {
-console.log(i);
+//console.log(i);
         initTab(i, sk[i]);
         loadSketch(sk[i], i);
         tab++;
@@ -141,7 +154,7 @@ function listSketches() {
 		var list = jQuery('#list_sketches');
 		
 		for (var i in data) {
-			//console.log(data[i]);
+			////console.log(data[i]);
 			if (typeof data[i] === 'string') {
 				jQuery('<li><a href="#" class="sketchload" onclick="loadProject(\''+data[i]+'\');">'+data[i]+'</a></li>').appendTo(list);
 			} else if (typeof data[i] === 'object') {
@@ -163,7 +176,7 @@ function listSketches() {
 
 function log(str) {
 	Processing.logger.println(str);
-	console.log(str);
+	//console.log(str);
 }
 
 function saveImage(sketchId, modal) {
@@ -190,4 +203,3 @@ function setModalSize() {
 		height: sketch.height
 	});
 }
-
