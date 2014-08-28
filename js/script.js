@@ -61,21 +61,46 @@ function restoreData() {
 	}
 }
 
-function loadSketch(sketch) {
+function loadSketch(sketch, tab) {
+	var tab = tab || 0;
 	var sketch = sketch || 'default.pde';
+	console.log(sketch, tab);
 	jQuery.get("pde/"+sketch, function(data) {
 		editor.setValue(data);
 		log(sketch+' sketch loaded');
 	});
 }
 
+function loadProject(sketches) {
+	var sk = sketches.split(',');
+	var tab = 0;
+
+	for (var i = sk.length - 1; i >= 0; i--) {
+//		console.log(sk[i], tab);
+		loadSketch(sk[i], tab);
+		tab++;
+	};
+}
+
 function listSketches() {
 	jQuery.get("pde/list.php", function(data) {
 		var list = jQuery('#list_sketches');
-		for (var i = data.length - 1; i >= 0; i--) {
-			if (data[i]=='default.pde') continue;
-			jQuery('<li><a href="#" class="sketchload" onclick="loadSketch(this.innerHTML);">'+data[i]+'</a></li>').appendTo(list);
-		};
+		console.log(data);
+		for (var i in data) {
+			//console.log(data[i]);
+			if (typeof data[i] === 'string') {
+				jQuery('<li><a href="#" class="sketchload" onclick="loadSketch(\''+data[i]+'\');">'+data[i]+'</a></li>').appendTo(list);
+			} else if (typeof data[i] === 'object') {
+				var sketches = '';
+				for (var j = data[i].length - 1; j >= 0; j--) {
+					if (j<data[i].length - 1) sketches += ',';
+					sketches += i+'/'+data[i][j];
+
+				};
+				jQuery('<li><a href="#" class="sketchload" onclick="loadProject(\''+sketches+'\');">'+i+' <span class="badge">'+data[i].length+'</span></a></li>').appendTo(list);
+			}
+		}
+
 		jQuery('<li class="divider"></li>').appendTo(list);
 		jQuery('<li><a href="#" class="sketchload" onclick="loadSketch(this.innerHTML);">default.pde</a></li>').appendTo(list);
 		jQuery('#action-listsketches').hide();
