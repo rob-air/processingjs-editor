@@ -61,17 +61,18 @@ function initTab(tabId, tabLabel) {
 	jQuery('<li class="'+active+'"><a href="#code'+tabId+'" role="tab" data-toggle="tab">'+label+'</a></li>').appendTo(jQuery('#tablist'));
 	jQuery('<div class="code tab-pane'+active+'" id="code'+tabId+'"></div>').appendTo(jQuery('#tabcontainer'));
 
-	
-	window.editor[tabId] = window.ace.edit('code'+tabId);
-	window.editor[tabId].setTheme('ace/theme/monokai');
-	window.editor[tabId].getSession().setMode('ace/mode/java');
-	window.editor[tabId].getSession().setTabSize(4);
-	window.editor[tabId].getSession().setUseSoftTabs(true);
+	if (!window.editor.pjstabs || typeof window.editor.pjstabs === 'undefined') window.editor.pjstabs = [];
+	window.editor.pjstabs[tabId] = window.ace.edit('code'+tabId);
+	window.editor.pjstabs[tabId].setTheme('ace/theme/monokai');
+	window.editor.pjstabs[tabId].getSession().setMode('ace/mode/java');
+	window.editor.pjstabs[tabId].getSession().setTabSize(4);
+	window.editor.pjstabs[tabId].getSession().setUseSoftTabs(true);
 }
 
 function destroyTabs() {
 	i=0;
 	jQuery('#tablist li').each(function() {
+		console.log(jQuery(this));
 		jQuery(this).remove();
 		i++;
 	});
@@ -83,17 +84,18 @@ function destroyTabs() {
 	});
 
 	window.editor = [];
+	window.editor.pjstabs = [];
 }
 
 function saveData(tabId) {
-	localStorage.setItem("processing_sketch", editor[tabId].getValue());
+	localStorage.setItem("processing_sketch", editor.pjstabs[tabId].getValue());
 	log('Sketch saved in browser localStorage');
 }
 
 function restoreData(tabId) {
 	var sketch = localStorage.getItem("processing_sketch");
 	if (sketch!=null && sketch!="") {
-		editor[tabId].setValue(localStorage.getItem("processing_sketch"));
+		editor.pjstabs[tabId].setValue(localStorage.getItem("processing_sketch"));
 		log('Sketch restored from browser localStorage');
 	} else {
 		loadSketch('default.pde');
@@ -106,7 +108,7 @@ function loadSketch(sketch, tab) {
 
 	jQuery.get("pde/"+sketch, function(data) {
 
-		editor[tab].setValue(data);
+		window.editor.pjstabs[tab].setValue(data);
 		log(sketch+' sketch loaded');
 	});
 }
@@ -116,11 +118,22 @@ function loadProject(sketches) {
 	var tab = 0;
 	destroyTabs();
 
-	for (var i = sk.length - 1; i >= 0; i--) {
-		initTab(tab, sk[i]);
-		loadSketch(sk[i], tab);
-		tab++;
+    for (var i = 0; i < sk.length; i++) {
+console.log(i);
+        initTab(i, sk[i]);
+        loadSketch(sk[i], i);
+        tab++;
+    };
+
+}
+
+function getSketch() {
+	var globalSketch = '';
+	for (var i = 0; i < editor.pjstabs.length; i++) {
+		globalSketch += editor.pjstabs[i].getValue();
 	};
+
+	return globalSketch;
 }
 
 function listSketches() {
@@ -130,7 +143,7 @@ function listSketches() {
 		for (var i in data) {
 			//console.log(data[i]);
 			if (typeof data[i] === 'string') {
-				jQuery('<li><a href="#" class="sketchload" onclick="loadSketch(\''+data[i]+'\');">'+data[i]+'</a></li>').appendTo(list);
+				jQuery('<li><a href="#" class="sketchload" onclick="loadProject(\''+data[i]+'\');">'+data[i]+'</a></li>').appendTo(list);
 			} else if (typeof data[i] === 'object') {
 				var sketches = '';
 				for (var j = data[i].length - 1; j >= 0; j--) {
@@ -177,3 +190,4 @@ function setModalSize() {
 		height: sketch.height
 	});
 }
+

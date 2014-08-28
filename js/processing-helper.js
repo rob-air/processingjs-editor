@@ -31,10 +31,10 @@
       //output.value = '';
       canvas = createCanvas();
       //canvas = document.getElementById('modsketch_sketch');
-      var sketch = Processing.compile(editor.getValue());
+      var sketch = Processing.compile(getSketch());
 
       if (callback) {
-        if (!/exit\(\);/.test(editor.getValue())) {
+        if (!/exit\(\);/.test(getSketch())) {
           throw "exit() not found in sketch. Add the exit() command, and re-run the sketch.";
         }
         sketch.onExit = callback;
@@ -55,7 +55,7 @@
   global.convertToJS = function() {
     try {
       output.value = js_beautify(
-        Processing.compile(editor.getValue()).sourceCode).replace(/\n\n\n+/g, '\n\n');
+        Processing.compile(getSketch()).sourceCode).replace(/\n\n\n+/g, '\n\n');
       output.select();
     } catch (e) {
       output.value = "Parser Error! Error was:\n" + e.toString();
@@ -91,7 +91,7 @@
         var dimensions = "[" + canvas.width + "," + canvas.height + "]";
         // Opera doesn't have btoa() so this won't work there.
         document.location.href= "data:text/plain;charset=utf-8;base64," +
-          btoa('//' + dimensions + pixels + '\n' + editor.getValue());
+          btoa('//' + dimensions + pixels + '\n' + getSketch());
     } catch (e) {
         output.value = "Error creating ref test! Error was: " + e.toString();
     }
