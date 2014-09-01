@@ -43,8 +43,12 @@
 			</div>
 
 		<!-- Nav tabs -->
-		<ul class="nav nav-tabs" role="tablist" id="tablist">
+		<ul class="nav nav-pills" role="tablist" id="tablist">
 		</ul>
+
+		<ul class="nav nav-pills" id="actionlist">
+			<li><a id="opennewtab" class="active"><span class="glyphicon glyphicon-plus"></span> New tab</a>
+		</ul> 
 
 			
 		</div>

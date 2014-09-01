@@ -6,22 +6,32 @@ canvas#sketch {
 	border: 1px solid;
 }
 
-#code0 {
-	position: absolute;
-	font-size: 16px;
-}
-
-#code1 {
-	position: absolute;
-	font-size: 16px;
-}
-
 .code {
 	top: 90px;
 	right: 0;
 	bottom: 80px;
 	left: 0;
 	font-size: 16px;
+}
+
+.code {
+	position: absolute !important;
+	font-size: 16px !important;
+}
+
+#tablist, #actionlist {
+	margin-top: 10px;
+	padding-left: 15px;
+	border-bottom: none;
+	float: left;
+}
+
+#tablist.nav li a, #actionlist li a {
+	padding: 5px 9px;
+} 
+
+#opennewtab {
+	cursor: pointer;
 }
 
 #modsketch_sketch {

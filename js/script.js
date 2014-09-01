@@ -46,11 +46,15 @@ require(['jquery-ui', 'bootstrap'], function($, _bootstrap) {
 
 		listSketches();
 
-
 		jQuery('#tablist a').click(function (e) {
 			e.preventDefault()
 			jQuery(this).tab('show')
-		})
+		});
+
+		jQuery('#opennewtab').click(function(e){
+			var tabid = window.editor.pjstabs.length;
+			initTab(tabid, 'code'+tabid);
+		});
 	});
 	return {};
 });
