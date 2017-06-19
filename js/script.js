@@ -43,9 +43,6 @@ require(['jquery-ui', 'bootstrap'], function($, _bootstrap) {
 			handle: ".modal-header"
 		});
 
-
-		listSketches();
-
 		jQuery('#tablist a').click(function (e) {
 			e.preventDefault()
 			jQuery(this).tab('show')
@@ -56,15 +53,19 @@ require(['jquery-ui', 'bootstrap'], function($, _bootstrap) {
 			initTab(tabid, 'code'+tabid);
 		});
 
-		hashCheck();
+		startup();
 
 	});
 	return {};
 });
 
+function startup() {
+	listSketches();
+	hashCheck();
+}
+
 function hashCheck() {
 	var hash = window.location.hash.substr(1);
-	//console.log(hash);
 	if (hash.length>1) loadSketch(hash);
 }
 
@@ -118,7 +119,7 @@ function restoreData(tabId) {
 	//console.log(typeof sketches);
 	if (typeof sketches === 'object') {
 		for (var i = 0; i < sketches.length; i++) {
-			initTab(i, 'Tab '+i);
+			initTab(i, 'Save '+i);
 			window.editor.pjstabs[i].setValue(sketches[i]);
 		};
 		//editor.pjstabs[tabId].setValue(localStorage.getItem("processing_sketch"));
