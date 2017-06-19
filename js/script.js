@@ -55,12 +55,21 @@ require(['jquery-ui', 'bootstrap'], function($, _bootstrap) {
 			var tabid = window.editor.pjstabs.length;
 			initTab(tabid, 'code'+tabid);
 		});
+
+		hashCheck();
+
 	});
 	return {};
 });
 
+function hashCheck() {
+	var hash = window.location.hash.substr(1);
+	//console.log(hash);
+	if (hash.length>1) loadSketch(hash);
+}
+
 function initTab(tabId, tabLabel) {
-	var label = tabLabel || 'code'+tabId;
+	var label = tabLabel || 'Tab '+tabId;
 	var active = tabId==0? ' active': '';
 	jQuery('<li class="'+active+'"><a href="#code'+tabId+'" role="tab" data-toggle="tab">'+label+'</a></li>').appendTo(jQuery('#tablist'));
 	jQuery('<div class="code tab-pane'+active+'" id="code'+tabId+'"></div>').appendTo(jQuery('#tabcontainer'));
@@ -124,7 +133,8 @@ function loadSketch(sketch, tab) {
 	var sketch = sketch || 'default.pde';
 
 	jQuery.get("pde/"+sketch, function(data) {
-
+		destroyTabs();
+		initTab(0, sketch);
 		window.editor.pjstabs[tab].setValue(data);
 		log(sketch+' sketch loaded');
 	});
