@@ -31,33 +31,33 @@ require.config({
 require(['ace/ace'], function(ace) {
 	// Set up the editor
 	window.ace = ace;
+	require(['jquery-ui', 'bootstrap'], function($, _bootstrap) {
+		jQuery(document).ready(function() {
+			destroyTabs();
+			initTab(0);
+			
+			jQuery(".modal").draggable({
+				handle: ".modal-header"
+			});
 
-});
+			jQuery('#tablist a').click(function (e) {
+				e.preventDefault()
+				jQuery(this).tab('show')
+			});
 
-require(['jquery-ui', 'bootstrap'], function($, _bootstrap) {
-	jQuery(document).ready(function() {
-		destroyTabs();
-		initTab(0);
-		
-		jQuery(".modal").draggable({
-			handle: ".modal-header"
+			jQuery('#opennewtab').click(function(e){
+				var tabid = window.editor.pjstabs.length;
+				initTab(tabid, 'code'+tabid);
+			});
+
+			startup();
+
 		});
-
-		jQuery('#tablist a').click(function (e) {
-			e.preventDefault()
-			jQuery(this).tab('show')
-		});
-
-		jQuery('#opennewtab').click(function(e){
-			var tabid = window.editor.pjstabs.length;
-			initTab(tabid, 'code'+tabid);
-		});
-
-		startup();
-
+		return {};
 	});
-	return {};
 });
+
+
 
 function startup() {
 	listSketches();

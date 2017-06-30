@@ -18,11 +18,12 @@ void setup() {
   fill(200);
   cCount = width/cell;
   cells = new boolean[cCount+1][cCount+1];
-  tileSets = new String[4];
+  tileSets = new String[5];
   tileSets[0] = "A";
   tileSets[1] = "B";
   tileSets[2] = "C";
   tileSets[3] = "D";
+  tileSets[4] = "E";
   
   ArrayList<boolean[][]> cellStore = new ArrayList<boolean[][]>();
   
